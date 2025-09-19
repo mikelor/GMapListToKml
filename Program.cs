@@ -1,7 +1,10 @@
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using CsvHelper;
+using GMapListToKml.Models;
 using GMapListToKml.Options;
 using GMapListToKml.Services;
 using GMapListToKml.Utilities;
@@ -76,6 +79,9 @@ public static class Program
         {
             using var httpClient = CreateHttpClient();
 
+            // Parse command line arguments
+            bool exportCsv = args.Contains("--csv", StringComparer.OrdinalIgnoreCase);
+
             var scraper = new GoogleMapsListScraper(httpClient, loggerFactory.CreateLogger<GoogleMapsListScraper>());
             var listData = await scraper.FetchListAsync(appOptions.InputListUri, cancellation.Token).ConfigureAwait(false);
 
@@ -85,6 +91,17 @@ public static class Program
             await kmlWriter.WriteAsync(listData, outputPath, cancellation.Token).ConfigureAwait(false);
 
             logger.LogInformation("KML file created at {OutputPath}", outputPath);
+
+            if (exportCsv)
+            {
+                // Sanitize the name for a valid filename
+                var csvFileName = string.Concat(listData.Name.Split(System.IO.Path.GetInvalidFileNameChars())) + ".csv";
+                using var writer = new System.IO.StreamWriter(csvFileName);
+                using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+                csv.WriteRecords(listData.Places);
+                logger.LogInformation("CSV file created: {CsvFileName}", csvFileName);
+            }
+
             return 0;
         }
         catch (OperationCanceledException)

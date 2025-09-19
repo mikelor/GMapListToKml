@@ -11,12 +11,3 @@ public sealed record GoogleMapsListData(
     string? Creator,
     IReadOnlyList<GoogleMapsPlace> Places);
 
-/// <summary>
-/// Represents a single location extracted from the Google Maps list.
-/// </summary>
-public sealed record GoogleMapsPlace(
-    string Name,
-    string? Address,
-    string? Notes,
-    double? Latitude,
-    double? Longitude);

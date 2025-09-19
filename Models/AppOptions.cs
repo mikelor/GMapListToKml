@@ -1,7 +1,3 @@
-using System;
-
-namespace GMapListToKml.Options;
-
 public sealed class AppOptions
 {
     public Uri InputListUri { get; }

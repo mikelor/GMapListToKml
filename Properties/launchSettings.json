@@ -2,7 +2,7 @@
   "profiles": {
     "GMapListToKml": {
       "commandName": "Project",
-      "commandLineArgs": "--inputList \"https://maps.app.goo.gl/PXUd7KkUpCfdY2Z87\"",
+      "commandLineArgs": "--inputList \"https://maps.app.goo.gl/PXUd7KkUpCfdY2Z87\" --csv",
       "workingDirectory": "F:\\GMapListToKml"
     }
   }
